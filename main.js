@@ -1,108 +1,43 @@
+const carrito = [];
+const productos = [
+  { id: 1, nombre: 'Producto A', tipo: 'Tipo 1', precio: 1000 },
+  { id: 2, nombre: 'Producto B', tipo: 'Tipo 2', precio: 1500 },
+  { id: 3, nombre: 'Producto C', tipo: 'Tipo 3', precio: 2000 }
+];
 
-//construccion para una calculadora
-
-let num1
-let num2
-
-
-
-//funcion validar numeros
-
-function validarNumero(numero){
-    if(!isNaN(numero) && numero !== '' ){
-        return true;
-    }
-    else {
-        return false;
-    }
+// Funciones
+function agregarAlCarrito(productoIndex, cantidad) {
+  carrito.push({ producto: productos[productoIndex], cantidad });
 }
 
-// Funciones para las operaciones matemáticas
-function sumar(a, b) {
-    return a + b;
+function calcularTotal() {
+  let total = 0;
+  for (let item of carrito) {
+    total = item.producto.precio * item.cantidad;
   }
-  
-  function restar(a, b) {
-    return a - b;
-  }
-  
-  function multiplicar(a, b) {
-    return a * b;
-  }
-  
-  function dividir(a, b) {
-    if (b === 0) {
-      return "Error: No se puede dividir por cero";
-    } else {
-      return a / b;
-    }
-  }
-  
-//funcion validar operacion
-
-function validarOperacion(operacion){
-    if (operacion === '+' || operacion === '-' || operacion === '*' || operacion === '/'){
-        return true;
-    }
-    else{
-        return false;
-    }
-    
+  return total;
 }
 
-  // Función principal para operar la calculadora
-  function calculadora() {
-
-    let operacion;
-
-    do { 
-        operacion = prompt("Ingrese la operación que desea realizar (+, -, *, /):");
-  
-        if ( !validarOperacion(operacion)) {
-
-         alert("Operación no válida");
-        }
-    } while (!validarOperacion(operacion))
-
-    do {
-        num1 = parseFloat(prompt("Ingrese el primer número:"));
-        if ( !validarNumero(num1)){
-            alert ( "valor invalido");
-        }
-
-    } while (!validarNumero(num1))
-  
-    do {
-        num2 = parseFloat(prompt("Ingrese el segundo número:"));
-        if ( !validarNumero(num2)){
-            alert ( "valor invalido");
-        }
-
-    } while ( !validarNumero(num2))
-     
-  
-    let resultado;
-  
-    switch (operacion) {
-      case "+":
-        resultado = sumar(num1, num2);
-        break;
-      case "-":
-        resultado = restar(num1, num2);
-        break;
-      case "*":
-        resultado = multiplicar(num1, num2);
-        break;
-      case "/":
-        resultado = dividir(num1, num2);
-        break;
-      default:
-        resultado = "Operación no válida";
-    }
-  
-    alert ('El resultado de '+ num1 + operacion + num2 + ' es = ' + resultado);
+function mostrarCarrito() {
+  console.log('Carrito de compras:');
+  for (let item of carrito) {
+    console.log(`${item.producto.nombre} x ${item.cantidad} = $${item.producto.precio * item.cantidad}`);
   }
-  
-  // Ejecutar la calculadora
-  calculadora();
-  
+}
+
+function agregarProducto(nuevoProducto) {
+  productos.push(nuevoProducto);
+}
+
+let nuevoProducto =  { id: 4, nombre: 'Producto D', tipo: 'Tipo 2', precio: 2500 };
+agregarProducto(nuevoProducto);
+
+// Captura de entradas
+let productoIndex = parseInt(prompt('Seleccione el tipo de producto que desea comprar:\n1. Producto A\n2. Producto B\n3. Producto C'));
+let cantidad = parseInt(prompt('Ingrese la cantidad:'));
+
+// Operaciones
+agregarAlCarrito(productoIndex - 1, cantidad);
+let totalCompra = calcularTotal();
+mostrarCarrito();
+console.log(`Total de la compra: $${totalCompra}`);
