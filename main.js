@@ -1,43 +1,68 @@
-const carrito = [];
+let carrito = [];
+
 const productos = [
-  { id: 1, nombre: 'Producto A', tipo: 'Tipo 1', precio: 1000 },
-  { id: 2, nombre: 'Producto B', tipo: 'Tipo 2', precio: 1500 },
-  { id: 3, nombre: 'Producto C', tipo: 'Tipo 3', precio: 2000 }
-];
+  { id: 1,nombre:'producto 1',categoria: 'electrodomesticos', precio: 20000 },
+  { id: 2,nombre:'producto 2',categoria: 'comestibles', precio: 600 },
+  { id: 3,nombre:'producto 3',categoria: 'indumentaria', precio: 2000 },
+  { id: 4,nombre:'producto 4',categoria: 'electrodomesticos', precio: 2000 },
 
-// Funciones
-function agregarAlCarrito(productoIndex, cantidad) {
-  carrito.push({ producto: productos[productoIndex], cantidad });
+]
+
+
+
+// Función para agregar un nuevo producto
+
+function agregarNuevoProducto() {
+  
+  const id = productos.length + 1;
+  const nombre = prompt('Ingrese el nombre del nuevo Producto:');
+  const categoria = prompt('ingrese la categoria de su Producto');
+  const precio = parseInt(prompt ('ingrese el precio'));
+
+  // Crear el nuevo producto
+  productos.push( {id, nombre, categoria, precio} )
 }
 
-function calcularTotal() {
-  let total = 0;
-  for (let item of carrito) {
-    total = item.producto.precio * item.cantidad;
+
+// Función para mostrar la lista de productos
+function mostrarListaProductos() {
+  console.log('----- Lista de Productos -----');
+  productos.forEach(producto => {
+    console.log(`${producto.nombre}  $${producto.precio}   ${producto.categoria}`);
+  });
+}
+
+// Función para agregar productos al carrito
+function agregarAlCarrito(nombreProducto, cantidad) {
+  const productoEncontrado = productos.find(producto => producto.nombre.toLowerCase() === nombreProducto.toLowerCase());
+
+  if (productoEncontrado) {
+    const itemExistente = carrito.find(item => item.producto.nombre.toLowerCase() === nombreProducto.toLowerCase());
+
+    if (itemExistente) {
+      // Si el producto ya está en el carrito, actualiza la cantidad
+      itemExistente.cantidad += cantidad;
+    } else {
+      // Si el producto no está en el carrito, agrégalo
+      carrito.push({ producto: productoEncontrado, cantidad });
+    }
+
+    console.log(`Se agregaron ${cantidad} ${nombreProducto}(s) al carrito.`);
+  } else {
+    console.log(`El producto "${nombreProducto}" no existe en la lista.`);
   }
-  return total;
 }
 
+// Función para mostrar el contenido del carrito y la suma total
 function mostrarCarrito() {
-  console.log('Carrito de compras:');
-  for (let item of carrito) {
+  console.log('----- Contenido del Carrito -----');
+  let sumaTotal = 0;
+
+  carrito.forEach(item => {
     console.log(`${item.producto.nombre} x ${item.cantidad} = $${item.producto.precio * item.cantidad}`);
-  }
+    sumaTotal += item.producto.precio * item.cantidad;
+  });
+
+  
+  console.log(`Suma Total: $${sumaTotal}`);
 }
-
-function agregarProducto(nuevoProducto) {
-  productos.push(nuevoProducto);
-}
-
-let nuevoProducto =  { id: 4, nombre: 'Producto D', tipo: 'Tipo 2', precio: 2500 };
-agregarProducto(nuevoProducto);
-
-// Captura de entradas
-let productoIndex = parseInt(prompt('Seleccione el tipo de producto que desea comprar:\n1. Producto A\n2. Producto B\n3. Producto C'));
-let cantidad = parseInt(prompt('Ingrese la cantidad:'));
-
-// Operaciones
-agregarAlCarrito(productoIndex - 1, cantidad);
-let totalCompra = calcularTotal();
-mostrarCarrito();
-console.log(`Total de la compra: $${totalCompra}`);
